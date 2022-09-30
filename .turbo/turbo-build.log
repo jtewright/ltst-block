@@ -1,0 +1,5 @@
+block-template-react:build: cache hit, replaying output 6e1d40ec625fa52c
+block-template-react:build: yarn run v1.22.19
+block-template-react:build: $ block-scripts build
+block-template-react:build: Done. Build result is ready to be served from /home/runner/work/blockprotocol/blockprotocol/packages/block-template-react/dist
+block-template-react:build: Done in 15.85s.

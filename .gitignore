@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Logs
 logs
 *.log
@@ -102,3 +103,8 @@ dist
 
 # TernJS port file
 .tern-port
+=======
+dist
+node_modules
+.blockprotocolrc
+>>>>>>> dcd75bd (basic block, graphService undefined, unsure about entityId)
