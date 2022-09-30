@@ -54,8 +54,9 @@ export const App: BlockComponent<BlockEntityProperties> = ({
     const { graphService } = useGraphBlockService(blockRootRef);
 
 
-    const [channelId, setChannelId] = useState(entityId == "none" ? "" : enti);
+    const [channelId, setChannelId] = useState(entityId == "none" ? "" : entityId);
     const [update, setUpdate] = useState(null);
+    const [channel, setChannel] = useState(null);
     const [loading, setLoading] = useState(channelId ? true : false);
 
     useEffect(() => {
@@ -85,31 +86,32 @@ export const App: BlockComponent<BlockEntityProperties> = ({
             const res = await fetch(`https://ltst.xyz/api/latestext?channelId=${channelId}&apiKey=${apiKey}`);
             const json = await res.json();
             setUpdate(json.update);
+            setChannel(json.channel);
             setLoading(false);
         }, [loading, channelId],
     );
 
   return (
-    <div style={{fontFamily: "sans-serif", maxWidth: "100%"}}>
+    <div style={{fontFamily: "Inter", maxWidth: "100%"}}>
             {loading ? 
                 <div>Loading...</div>
             : update == null ?
                 <form onSubmit={loadChannel}>
                     <input
-                        value={channelId} 
+                        value={channelId}
+                        style={{width: "200px", height: "25px"}}
                         onChange={(e) => setChannelId(e.currentTarget.value)}
                         placeholder={"Channel ID"} />
-                    <button type="submit">Load</button>
+                    <button style={{height: "25px"}} type="submit">Load</button>
                 </form>
             :
                 <div>
-                    <div style={{fontSize: "1rem", marginBottom: "0.5rem", color: update.textColor ?? "#0000000"}}>
-                        Channel {channelId}
+                    <div style={{fontSize: "1rem", marginBottom: "0.5rem", color: "#6b7280"}}>
+                        {channel.title}
                         <div style={{display: "inline", marginLeft: "0.25rem"}}>
-                        • <a href={`https://ltst.xyz/channel/${channelId}`}>{"Open in Latest"}</a>
                         </div>
                     </div>
-                    <div style={{backgroundColor: update.bgColor ?? "#E5E5E5", borderRadius: "0.5rem", padding: "0.75rem"}}>
+                    <div style={{backgroundColor: update.bgColor ?? "#f1f5f9", borderRadius: "0.5rem", padding: "1rem"}}>
                         {update.image ? <img style={{maxWidth: "100%", borderRadius: "0.5rem", marginBottom: "0.75rem"}} src={update.image} /> : null}
                         {update.text ? <div style={{fontSize: "1rem", color: update.textColor ?? "#0000000", whiteSpace: "pre-wrap"}}>{update.text}</div> : null}
                         {update.href ?
@@ -117,6 +119,9 @@ export const App: BlockComponent<BlockEntityProperties> = ({
                                 <a href={update.href}>{update.href}</a>
                             </div>
                         : null}
+                    </div>
+                    <div style={{marginTop: "0.5rem", textAlign: "right", fontSize: "0.9rem", color: "6b7280"}}>
+                        {new Date(update.ts/1e3).toLocaleString()} • <a href={`https://ltst.xyz/channel/${channelId}`}>{"ltst.xyz ↗"}</a>
                     </div>
                 </div>
             }
