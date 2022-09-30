@@ -68,7 +68,7 @@ export const App: BlockComponent<BlockEntityProperties> = ({
 
     const updateEntity = useCallback(
         async (channelId) => {
-        console.log('yoi', graphService);
+        console.log('graphService', graphService);
         const { data, errors } = await graphService.updateEntity({
             data: {
               entityId: channelId,
