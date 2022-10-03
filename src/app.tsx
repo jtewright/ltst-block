@@ -54,7 +54,7 @@ export const App: BlockComponent<BlockEntityProperties> = ({
     const { graphService } = useGraphBlockService(blockRootRef);
 
 
-    const [channelId, setChannelId] = useState(entityId == "none" ? "" : entityId);
+    const [channelId, setChannelId] = useState(properties.channelId ?? null);
     const [update, setUpdate] = useState(null);
     const [channel, setChannel] = useState(null);
     const [loading, setLoading] = useState(channelId ? true : false);
@@ -69,11 +69,10 @@ export const App: BlockComponent<BlockEntityProperties> = ({
 
     const updateEntity = useCallback(
         async (channelId) => {
-        console.log('graphService', graphService);
         const { data, errors } = await graphService.updateEntity({
             data: {
-              entityId: channelId,
-              properties: { name: "Latest Channel " + channelId },
+              entityId: entityId,
+              properties: { channelId: channelId },
             },
           });
     }, [entityId, loading, channelId]);
@@ -92,13 +91,13 @@ export const App: BlockComponent<BlockEntityProperties> = ({
     );
 
   return (
-    <div style={{fontFamily: "Inter", maxWidth: "100%"}}>
+    <div style={{fontFamily: "Inter", maxWidth: "100%"}} ref={blockRootRef}>
             {loading ? 
                 <div>Loading...</div>
             : update == null ?
                 <form onSubmit={loadChannel}>
                     <input
-                        value={channelId}
+                        value={channelId ?? ""}
                         style={{width: "200px", height: "25px"}}
                         onChange={(e) => setChannelId(e.currentTarget.value)}
                         placeholder={"Channel ID"} />

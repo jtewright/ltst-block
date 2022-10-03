@@ -22,8 +22,8 @@ const DevApp = () => {
     <MockBlockDock
       blockDefinition={{ ReactComponent: Component }}
       blockEntity={{
-        entityId: "none",
-        properties: { name: "channelId invalid" },
+        entityId: "latest-block",
+        properties: { channelId: null },
       }}
       blockInfo={packageJSON.blockprotocol}
       debug // remove this to start with the debug UI minimised. You can also toggle it in the UI
