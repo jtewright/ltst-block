@@ -58,24 +58,70 @@ export const App: BlockComponent<BlockEntityProperties> = ({
     const [update, setUpdate] = useState(null);
     const [channel, setChannel] = useState(null);
     const [loading, setLoading] = useState(channelId ? true : false);
+    const [entityTypeId, setEntityTypeId] = useState(null);
 
     useEffect(() => {
-        if (channelId && update == null) {
-            // form submit
-            loadChannel(channelId);
-            updateEntity(channelId);
+        if (graphService) {
+            if (update !== null) {
+                // update loads from ltst.xyz/api
+                storeUpdate()
+            }
+            if (channelId && update == null) {
+                // channelId form submit
+                loadChannel(channelId);
+                updateEntity(graphService);
+            }
         }
-    }, [loading, update]);
+    }, [loading, update, graphService]);
 
     const updateEntity = useCallback(
-        async (channelId) => {
-        const { data, errors } = await graphService.updateEntity({
-            data: {
-              entityId: entityId,
-              properties: { channelId: channelId },
-            },
-          });
-    }, [entityId, loading, channelId]);
+        async (gs) => {
+            const { data, errors } = await gs.updateEntity({
+                data: {
+                    entityId: entityId,
+                    properties: { channelId: channelId },
+                },
+            });
+        }, [entityId, loading, channelId]);
+
+    const storeUpdate = useCallback(
+        async () => {
+            if (entityTypeId == null) {
+                const { data, errors } = await graphService.createEntityType({
+                    source: entityId,
+                    data: {
+                        schema: {
+                            $id: 'https://blockprotocol.org/types/92b78d17-3e9f-45a9-a828-dba28ce0ff2a',
+                            $schema: 'https://blockprotocol.org/types/92b78d17-3e9f-45a9-a828-dba28ce0ff2a?json',
+                            title: 'LatestUpdate',
+                            type: 'latest-update',
+                        }
+                    },
+                });
+                setEntityTypeId(data.entityTypeId);
+                const { data2, errors2 } = await graphService.createEntity({
+                    source: entityId,
+                    data: {
+                        entityTypeId: data.entityTypeId,
+                        properties: {
+                            ...update
+                        },
+                    },
+                });
+            } else {
+                const { data3, errors3 } = await graphService.createEntity({
+                    source: entityId,
+                    data: {
+                        entityTypeId: entityTypeId,
+                        properties: {
+                            ...update
+                        },
+                    },
+                });
+            }
+            
+        }
+    , [entityId, loading, channelId]);
 
     const loadChannel = useCallback(
         async (e) => {
@@ -90,11 +136,20 @@ export const App: BlockComponent<BlockEntityProperties> = ({
         }, [loading, channelId],
     );
 
+    const reset = useCallback(
+        async (e) => {
+            if (e.preventDefault) e.preventDefault();
+            setChannelId(null);
+            setChannel(null);
+            setUpdate(null);
+        }, [channel, update, channelId]
+    )
+
   return (
     <div style={{fontFamily: "Inter", maxWidth: "100%"}} ref={blockRootRef}>
             {loading ? 
                 <div>Loading...</div>
-            : update == null ?
+            : channel == null && update == null ?
                 <form onSubmit={loadChannel}>
                     <input
                         value={channelId ?? ""}
@@ -105,10 +160,11 @@ export const App: BlockComponent<BlockEntityProperties> = ({
                 </form>
             :
                 <div>
-                    <div style={{fontSize: "1rem", marginBottom: "0.5rem", color: "#6b7280"}}>
-                        {channel.title}
-                        <div style={{display: "inline", marginLeft: "0.25rem"}}>
+                    <div style={{display: "flex", justifyContent: "space-between"}}>
+                        <div style={{fontSize: "1rem", marginBottom: "0.5rem", color: "#6b7280"}}>
+                            {channel.title}
                         </div>
+                        <a style={{cursor: "pointer", fontSize: "0.9rem", color: "6b7280", textDecoration: "underline"}} onClick={reset}>{"Switch Channel"}</a>
                     </div>
                     <div style={{backgroundColor: update.bgColor ?? "#f1f5f9", borderRadius: "0.5rem", padding: "1rem"}}>
                         {update.image ? <img style={{maxWidth: "100%", borderRadius: "0.5rem", marginBottom: "0.75rem"}} src={update.image} /> : null}

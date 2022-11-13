@@ -1,0 +1,43 @@
+{
+  "title": "LatestUpdate",
+  "author": "jtewright",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://blockprotocol.org/types/92b78d17-3e9f-45a9-a828-dba28ce0ff2a",
+  "entityTypeId": "92b78d17-3e9f-45a9-a828-dba28ce0ff2a",
+  "properties": {
+    "bgColor": {
+      "type": "string"
+    },
+    "bgImage": {
+      "type": "string"
+    },
+    "darkBgColor": {
+      "type": "string"
+    },
+    "darkTextColor": {
+      "type": "string"
+    },
+    "href": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "image": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    },
+    "textColor": {
+      "type": "string"
+    },
+    "ts": {
+      "type": "integer"
+    },
+    "video": {
+      "type": "string"
+    }
+  }
+}

@@ -23,7 +23,7 @@ const DevApp = () => {
       blockDefinition={{ ReactComponent: Component }}
       blockEntity={{
         entityId: "latest-block",
-        properties: { channelId: null },
+        properties: { channelId: null }, // TESTING
       }}
       blockInfo={packageJSON.blockprotocol}
       debug // remove this to start with the debug UI minimised. You can also toggle it in the UI
