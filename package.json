@@ -1,7 +1,7 @@
 {
   "name": "latest",
-  "version": "0.0.1",
-  "description": "displays channel from https://ltst.xyz",
+  "version": "0.0.2",
+  "description": "displays channel from https://ltst.xyz and stores the update in the embedding application",
   "keywords": [
     "latest",
     "dashboard",
@@ -44,8 +44,8 @@
       "entryPoint": "react"
     },
     "displayName": "Latest",
-    "icon": "public/omega.svg",
-    "image": "public/block-preview.png",
+    "icon": "public/ltst-block-icon.svg",
+    "image": "public/ltst-block-preview.png",
     "name": "Latest",
     "protocol": "0.2"
   }
